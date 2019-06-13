@@ -1,14 +1,7 @@
 import express from "express";
 import * as path from "path";
 import { router as indexRouter } from "./routes/index";
-
-// var express = require('express');
-// var path = require('path');
-// var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
-
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
+import { router as oauthRouter } from "./routes/oauth";
 
 const app = express();
 
@@ -16,12 +9,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-// app.use('/users', usersRouter);
+app.use("/oauth", oauthRouter);
 
 app.listen(3000, () => {
+// tslint:disable-next-line: no-console
     console.log("Server is running in http://localhost:3000");
 });
 
