@@ -2,7 +2,7 @@ import { GaxiosPromise } from "gaxios";
 import { APIRequestContext, GlobalOptions, GoogleConfigurable, MethodOptions, createAPIRequest, APIRequestParams } from "googleapis-common";
 
 // tslint:disable: no-namespace
-export namespace photos_lib {
+export namespace photos_lib_v1 {
     export interface IOptions extends GlobalOptions {
         version: "v1";
     }
@@ -24,21 +24,22 @@ export namespace photos_lib {
 
     export class Resource$Albums {
         public context: APIRequestContext;
+
         constructor(context: APIRequestContext) {
             this.context = context;
         }
 
-        get(params: Params$Resource$Albums$Get, options: MethodOptions): GaxiosPromise<Schema$Albums> {
+        public get(params: Params$Resource$Albums$Get, options: MethodOptions): GaxiosPromise<Schema$Albums> {
             // let params = { } as Params$Resource$Albums$Get;
 
             const rootUrl = options.rootUrl || "https://photoslibrary.googleapis.com/";
             const parameters: APIRequestParams = {
                 options: Object.assign(
                     {
-                        url: ( rootUrl + "/v1/albums/{albumId}" ),
+                        url: ( rootUrl + "/v1/albums/{albumId}" ).replace(/([^:]\/)\/+/g, "$1"),
                         method: "GET",
                     },
-                    options
+                    options,
                 ),
                 params,
                 requiredParams: ["albumId"],

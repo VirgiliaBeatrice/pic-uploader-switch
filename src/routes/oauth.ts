@@ -3,14 +3,22 @@ import { google } from "googleapis";
 import * as http from "http";
 import * as url from "url";
 import * as fs from "fs";
+import { Credentials } from "google-auth-library";
+import { json } from "body-parser";
+
+import { photos } from "../googleapis";
 
 const infoFile = fs.readFileSync("info.json");
-type ClientInfo = {
+const photosLib = photos("v1");
+
+photosLib.albums.get()
+interface ClientInfo {
     client_id: string;
     client_secret: string;
+    credentials?: Credentials;
 };
 
-const info: ClientInfo = JSON.parse(infoFile.toString());
+let info: ClientInfo = JSON.parse(infoFile.toString());
 console.log(info);
 
 export const router = express.Router();
@@ -45,6 +53,10 @@ router.get("/oauth2callback", async (req, res, next) => {
         const { tokens } = await oauth2Client.getToken(qs.get("code") as string);
         oauth2Client.credentials = tokens;
         console.log(tokens);
+
+        info.credentials = tokens;
+
+        fs.writeFileSync("info.json", JSON.stringify(info));
 
         res.redirect(301, "/");
 })
