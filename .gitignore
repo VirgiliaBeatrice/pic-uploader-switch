@@ -65,3 +65,6 @@ bin/
 
 # package-lock
 package-lock.json
+
+# sensitive file
+info.json

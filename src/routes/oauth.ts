@@ -2,13 +2,23 @@ import express from "express";
 import { google } from "googleapis";
 import * as http from "http";
 import * as url from "url";
+import * as fs from "fs";
+
+const infoFile = fs.readFileSync("info.json");
+type ClientInfo = {
+    client_id: string;
+    client_secret: string;
+};
+
+const info: ClientInfo = JSON.parse(infoFile.toString());
+console.log(info);
 
 export const router = express.Router();
 
 const oauth2Client = new google.auth.OAuth2(
-    CLIENT_ID,
-    CLIENT_SECRET,
-    "http://localhost:3000/authed",
+    info.client_id,
+    info.client_secret,
+    "http://localhost:3000/oauth/oauth2callback",
 );
 
 const photosScopes = [
@@ -34,6 +44,7 @@ router.get("/oauth2callback", async (req, res, next) => {
 
         const { tokens } = await oauth2Client.getToken(qs.get("code") as string);
         oauth2Client.credentials = tokens;
+        console.log(tokens);
 
         res.redirect(301, "/");
 })
