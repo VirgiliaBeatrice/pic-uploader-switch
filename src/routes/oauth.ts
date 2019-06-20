@@ -4,21 +4,20 @@ import * as http from "http";
 import * as url from "url";
 import * as fs from "fs";
 import { Credentials } from "google-auth-library";
-import { json } from "body-parser";
 
 import { photos } from "../googleapis";
 
 const infoFile = fs.readFileSync("info.json");
 const photosLib = photos("v1");
 
-photosLib.albums.get()
+// photosLib.albums.get()
 interface ClientInfo {
     client_id: string;
     client_secret: string;
     credentials?: Credentials;
-};
+}
 
-let info: ClientInfo = JSON.parse(infoFile.toString());
+const info: ClientInfo = JSON.parse(infoFile.toString());
 console.log(info);
 
 export const router = express.Router();
@@ -39,11 +38,15 @@ const photosScopes = [
 google.options({ auth: oauth2Client });
 
 router.get("/", (req, res, next) => {
-    const authorizeUrl = oauth2Client.generateAuthUrl(
-        { access_type: "offline", scope: photosScopes },
-    );
+    if (info.credentials) {
+        res.send("Authentication is finished.");
+    } else {
+        const authorizeUrl = oauth2Client.generateAuthUrl(
+            { access_type: "offline", scope: photosScopes },
+        );
 
-    res.redirect(authorizeUrl);
+        res.redirect(authorizeUrl);
+    }
 });
 
 router.get("/oauth2callback", async (req, res, next) => {
@@ -58,5 +61,5 @@ router.get("/oauth2callback", async (req, res, next) => {
 
         fs.writeFileSync("info.json", JSON.stringify(info));
 
-        res.redirect(301, "/");
+        // res.redirect(301, "/");
 })

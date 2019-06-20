@@ -3,3 +3,4 @@
 * [Typescript](https://alligator.io/typescript/new-project/)
 * [Express.js with Typescript](https://qiita.com/QKiita/items/0e9bf6ee9eab98905d77#appts%E3%81%AE%E4%BF%AE%E6%AD%A3)
 * [Express.js with Typescript](https://qiita.com/yuukive/items/012bdf1b9ff3881546b3)
+* [Remove sensitive files and their commits from Git history](https://stackoverflow.com/questions/872565/remove-sensitive-files-and-their-commits-from-git-history)
