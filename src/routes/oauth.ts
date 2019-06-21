@@ -1,32 +1,31 @@
 import express from "express";
-import { google } from "googleapis";
-import * as http from "http";
-import * as url from "url";
 import * as fs from "fs";
-import { Credentials } from "google-auth-library";
+import { google } from "googleapis";
+import * as url from "url";
 
 import { photos } from "../googleapis";
+import { getClient, getInfo, saveInfo } from "./clients";
 
-const infoFile = fs.readFileSync("info.json");
+// const infoFile = fs.readFileSync("info.json");
 const photosLib = photos("v1");
 
 // photosLib.albums.get()
-interface ClientInfo {
-    client_id: string;
-    client_secret: string;
-    credentials?: Credentials;
-}
+// interface ClientInfo {
+//     client_id: string;
+//     client_secret: string;
+//     credentials?: Credentials;
+// }
 
-const info: ClientInfo = JSON.parse(infoFile.toString());
-console.log(info);
+// const info: ClientInfo = JSON.parse(infoFile.toString());
+// console.log(info);
 
 export const router = express.Router();
 
-const oauth2Client = new google.auth.OAuth2(
-    info.client_id,
-    info.client_secret,
-    "http://localhost:3000/oauth/oauth2callback",
-);
+// const oauth2Client = new google.auth.OAuth2(
+//     info.client_id,
+//     info.client_secret,
+//     "http://localhost:3000/oauth/oauth2callback",
+// );
 
 const photosScopes = [
     "https://www.googleapis.com/auth/photoslibrary.readonly",
@@ -35,13 +34,15 @@ const photosScopes = [
 //     { access_type: "offline", scope: scopes }
 // );
 
-google.options({ auth: oauth2Client });
+const client = getClient();
+const info = getInfo();
+google.options({ auth: client });
 
 router.get("/", (req, res, next) => {
     if (info.credentials) {
         res.send("Authentication is finished.");
     } else {
-        const authorizeUrl = oauth2Client.generateAuthUrl(
+        const authorizeUrl = client.generateAuthUrl(
             { access_type: "offline", scope: photosScopes },
         );
 
@@ -53,8 +54,8 @@ router.get("/oauth2callback", async (req, res, next) => {
         const qs = new url.URL(req.url as string, "http://localhost:3000").searchParams;
         res.end("Authentication sucessful! Please retrun to the console.");
 
-        const { tokens } = await oauth2Client.getToken(qs.get("code") as string);
-        oauth2Client.credentials = tokens;
+        const { tokens } = await client.getToken(qs.get("code") as string);
+        client.credentials = tokens;
         console.log(tokens);
 
         info.credentials = tokens;

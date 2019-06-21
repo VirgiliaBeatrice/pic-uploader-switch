@@ -3,7 +3,7 @@ import { APIRequestContext, GlobalOptions, GoogleConfigurable, MethodOptions, cr
 
 // tslint:disable: no-namespace
 export namespace photos_lib_v1 {
-    export interface IOptions extends GlobalOptions {
+    export interface Options extends GlobalOptions {
         version: "v1";
     }
 
