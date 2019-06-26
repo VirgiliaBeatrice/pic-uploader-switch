@@ -22,6 +22,12 @@ export namespace photos_lib_v1 {
         albumId: string;
     }
 
+    export interface Params$Resource$Albums$List extends StandardParameters {
+        pageSize?: number;
+        pageToken?: string;
+        excludeNonAppCreateData?: boolean;
+    }
+
     export class Resource$Albums {
         public context: APIRequestContext;
 
@@ -29,7 +35,7 @@ export namespace photos_lib_v1 {
             this.context = context;
         }
 
-        public get(params: Params$Resource$Albums$Get, options: MethodOptions): GaxiosPromise<Schema$Albums> {
+        public get(params: Params$Resource$Albums$Get, options: MethodOptions): GaxiosPromise<Schema$Album> {
             // let params = { } as Params$Resource$Albums$Get;
 
             const rootUrl = options.rootUrl || "https://photoslibrary.googleapis.com/";
@@ -47,11 +53,30 @@ export namespace photos_lib_v1 {
                 context: this.context,
             };
 
+            return createAPIRequest<Schema$Album>(parameters);
+        }
+
+        public list(params: Params$Resource$Albums$List, options: MethodOptions): GaxiosPromise<Schema$Albums> {
+            const rootUrl = options.rootUrl || "https://photoslibrary.googleapis.com/";
+            const parameters: APIRequestParams = {
+                options: Object.assign(
+                    {
+                        url: ( rootUrl + "/v1/albums" ).replace(/([^:]\/)\/+/g, "$1"),
+                        method: "GET",
+                    },
+                    options,
+                ),
+                params,
+                requiredParams: [],
+                pathParams: [],
+                context: this.context,
+            };
+
             return createAPIRequest<Schema$Albums>(parameters);
         }
     }
 
-    export interface Schema$Albums {
+    export interface Schema$Album {
         id: string;
         title: string;
         productUrl: string;
@@ -60,6 +85,11 @@ export namespace photos_lib_v1 {
         mediaItemsCount: string;
         coverPhotoBaseUrl: string;
         coverPhotoMediaItemId: string;
+    }
+
+    export interface Schema$Albums {
+        albums: Schema$Album[];
+        nextPageToken: string;
     }
 
     export interface Schema$ShareInfo {

@@ -2,6 +2,7 @@ import express from "express";
 import * as path from "path";
 import { router as indexRouter } from "./routes/index";
 import { router as oauthRouter } from "./routes/oauth";
+import { router as photosRouter } from "./routes/photos";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
 app.use("/oauth", oauthRouter);
+app.use("/photos", photosRouter);
 
 app.listen(3000, () => {
 // tslint:disable-next-line: no-console

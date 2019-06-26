@@ -7,7 +7,7 @@ import { photos } from "../googleapis";
 import { getClient, getInfo, saveInfo } from "./clients";
 
 // const infoFile = fs.readFileSync("info.json");
-const photosLib = photos("v1");
+// const photosLib = photos({ auth: getClient(), version: "v1" });
 
 // photosLib.albums.get()
 // interface ClientInfo {
